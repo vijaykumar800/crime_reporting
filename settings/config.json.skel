@@ -1,0 +1,24 @@
+{
+  "gbq_config": {
+    "credentials": "gbq_auth_key.json",
+    "project": "learning",
+    "crime_table": "bigquery-public-data.austin_crime.crime"
+  },
+  "mail_config": {
+    "to": ["mankand007@gmail.com","vijaykumarrdhanapal@gmail.com"],
+    "host": "smpt.gmail.com",
+    "port": 587,
+    "user_name": "vijaykumarrdhanapal@gmail.com",
+    "password": "change_me"
+  },
+  "app_config": {
+    "output_filename": ""
+  },
+  "loguru_config": {
+    "app_name": "crime_report",
+    "rotation": "10 MB",
+    "retention": "1 year",
+    "level": "DEBUG"
+
+  }
+}
