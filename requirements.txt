@@ -2,3 +2,4 @@ pandas
 loguru
 google-cloud-bigquery
 google-auth
+db-dtypes
