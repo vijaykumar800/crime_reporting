@@ -34,6 +34,5 @@ def send_email(attachment_report_file,email_address,report_type):
         logger.debug('sending attachment file in email')
     server.send_message(message)
     logger.info('send email function end')
-    print()
-    print()
-    print()
+    logger.info('\n\n\n')
+

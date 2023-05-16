@@ -48,12 +48,11 @@ def process_report_request(report_dataframe):
     and email csv
     """
     logger.info('iterating dataframe to use the column values')
-    print()
-    print()
+    logger.info('\n\n')
     for index,row in report_dataframe.iterrows():
         logger.debug(f"report_type:{row['report_type']}---time_period:{row['time_period']}")
         logger.debug(f'current_report_record_no:{index+1}---total_report_record_count:{len(report_dataframe)}')
-        print()
+        logger.info()
         report_df = google_operations.get_crime_data(row['report_type'],row['time_period'])
         logger.debug('calling to_export_csv_file function')
         to_csv_file=to_export_csv_file(report_df,row['report_type'],today_time)
