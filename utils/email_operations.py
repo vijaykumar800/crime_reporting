@@ -1,12 +1,7 @@
-
 from settings import config_json
 import smtplib
 from settings import logger
 from email.message import EmailMessage
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email import encoders
 
 
 def send_email(attachment_report_file,email_address,report_type):
