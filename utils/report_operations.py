@@ -30,12 +30,16 @@ def to_export_csv_file(dataframe,report_type,time_stamp):
     logger.debug('creating file name')
     # to_csv_filename=f'{report_type}_{time_stamp}.csv'
     # to_csv_filename = eval(config_json["app_config"]["output_filename"])
-    to_csv_filename=config_json["app_config"]["output_filename"].format(report_type=report_type,time_stamp=time_stamp)
-    logger.debug('converting dataframe to csv file to the specified location')
-    dataframe.to_csv(to_csv_filename,index=False)
-    logger.debug('returning csv file')
-    logger.info('to_export_csv_file function end')
-    return to_csv_filename
+    if not dataframe.empty:
+        to_csv_filename=config_json["app_config"]["output_filename"].format(report_type=report_type,time_stamp=time_stamp)
+        logger.debug('converting dataframe to csv file to the specified location')
+        dataframe.to_csv(to_csv_filename,index=False)
+        logger.debug('returning csv file')
+        logger.info('to_export_csv_file function end')
+        return to_csv_filename
+    else:
+        logger.debug('file is empty')
+        return 'file is empty'
 
 
 def process_report_request(report_dataframe):
@@ -52,7 +56,7 @@ def process_report_request(report_dataframe):
     for index,row in report_dataframe.iterrows():
         logger.debug(f"report_type:{row['report_type']}---time_period:{row['time_period']}")
         logger.debug(f'current_report_record_no:{index+1}---total_report_record_count:{len(report_dataframe)}')
-        logger.info()
+        logger.info('\n')
         report_df = google_operations.get_crime_data(row['report_type'],row['time_period'])
         logger.debug('calling to_export_csv_file function')
         to_csv_file=to_export_csv_file(report_df,row['report_type'],today_time)
