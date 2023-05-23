@@ -15,14 +15,16 @@ client = bigquery.Client(credentials=credentials,project=project_id)
 
 def remove(string):
     pattern = re.compile(r'\s+')
-    return re.sub(pattern,' ',string)
+    return re.sub(pattern,'',string)
 
 
 def get_crime_data(report_type,time_period):
     logger.info('entering get_crime_data function')
     logger.debug('printing sql query')
     report_type = report_type.capitalize()
-    remove(report_type)
+    logger.info(report_type)
+    report_type = remove(report_type)
+    logger.info(report_type)
     report_sql=f"""SELECT *            
     FROM bigquery-public-data.austin_crime.crime 
     WHERE primary_type = '{report_type}' AND  
