@@ -3,6 +3,8 @@ from settings import logger
 from settings import config_json
 from datetime import datetime
 from utils import google_operations,email_operations
+import re
+from google.api_core.exceptions import BadRequest
 
 
 logger.info('initializing datetime function')
@@ -56,14 +58,20 @@ def process_report_request(report_dataframe):
         logger.debug(f"report_type:{row['report_type']}---time_period:{row['time_period']}")
         logger.debug(f'current_report_record_no:{index+1}---total_report_record_count:{len(report_dataframe)}')
         logger.info('\n')
-        report_type = report_type.capitalize()
-        logger.info(report_type)
-        report_type = remove_space(report_type)
-        logger.info(report_type)
-        report_df = google_operations.get_crime_data(row['report_type'],row['time_period'])
+        report_capital = str(row['report_type']).capitalize()
+        report_type = remove_space(report_capital)
+        try:
+            report_df = google_operations.get_crime_data(report_type,row['time_period'])
+        except BadRequest as e:
+            logger.warning(e.message)
+            logger.warning('time_period value in wrong format,skipping')
+            continue
+        #report_df = google_operations.get_crime_data(report_type, row['time_period'])
+
         logger.debug('calling to_export_csv_file function')
         if report_df.empty:
             logger.warning('no data returned from bigquery')
+            logger.info('\n\n\n')
             continue
         to_csv_file=to_export_csv_file(report_df,row['report_type'],today_time)
         logger.debug('calling send_email function')
