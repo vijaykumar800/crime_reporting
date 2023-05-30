@@ -13,27 +13,20 @@ project_id = config_json["gbq_config"]["project"]
 client = bigquery.Client(credentials=credentials,project=project_id)
 
 
-def remove(string):
-    pattern = re.compile(r'\s+')
-    return re.sub(pattern,'',string)
-
-
 def get_crime_data(report_type,time_period):
+
     logger.info('entering get_crime_data function')
     logger.debug('printing sql query')
-    report_type = report_type.capitalize()
-    logger.info(report_type)
-    report_type = remove(report_type)
-    logger.info(report_type)
-    report_sql=f"""SELECT *            
-    FROM bigquery-public-data.austin_crime.crime 
+    report_sql=f"""select * FROM bigquery-public-data.austin_crime.crime 
     WHERE primary_type = '{report_type}' AND  
-    date(timestamp) >= DATE_SUB(CURRENT_DATE(), INTERVAL {time_period} year);"""
+    date(timestamp) >= date_sub(DATE_SUB(CURRENT_DATE(), INTERVAL 7 year),
+    interval {time_period} day) and date(timestamp) <= date_sub(current_date(), interval 7 year);"""
     logger.debug(report_sql)
     logger.debug('start connect query to bigquery')
     query_job = client.query(report_sql)
     logger.debug('finish connecting query to bigquery')
     report_dataframe_records = query_job.result().to_dataframe()
+    print(report_dataframe_records)
     logger.debug('finish changing bigquery output table to dataframe and return dataframe')
     logger.info('get_crime_data function end')
     return report_dataframe_records
