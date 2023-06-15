@@ -5,12 +5,9 @@ from loguru import logger
 with open('settings/config.json','r') as f:
     config_json = json.load(f)
 
-
-logger.remove()
 logger.add(sys.stdout, backtrace=False, level="DEBUG")
-#logger.info(config_json["loguru"]["app_name"])
 logger.add('run_info.log',
-           rotation=config_json["loguru"]["retention"],
+           rotation=config_json["loguru"]["rotation"],
            retention=config_json["loguru"]["retention"],
            level="INFO")
 
